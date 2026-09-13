@@ -311,7 +311,7 @@ The pipeline is designed around Claude Code session traces, but the core pattern
 
 3. **Run prepare.py:** It handles embedding, negative mining, and pair generation. Point it at your workspace with `--workspace`.
 
-4. **Train:** The Mamba architecture and hyperparameters were validated across 639 experiments. They should generalize to similar workspace sizes (10K-100K chunks).
+4. **Train:** The Mamba architecture and hyperparameters were selected across 639 runs. Whether they generalize to similar workspace sizes (10K-100K chunks) is untested outside this workspace.
 
 5. **Deploy:** Export weights and plug into your context assembly pipeline.
 
