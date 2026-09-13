@@ -16,7 +16,7 @@ The system works without the TRM (salience fallback), but the TRM improves ranki
 
 2. **Training data preparation** -- How to convert raw signals into weighted training pairs. The intensity weighting scheme (crystallization 3.0, cascade 2.5, provenance 2.0, etc). How to generate synthetic negatives alongside real behavioral signals.
 
-3. **Model architecture** -- Full architecture specification (Mamba SSM, 2.28M params). Why temporal SSM beats spatial transformer for this task (639 experiments proving it). The complete hyperparameter space explored.
+3. **Model architecture** -- Full architecture specification (Mamba SSM, 2.28M params). Why we selected a temporal SSM over a spatial transformer for this task (639 runs; selection evidence, not proof). The complete hyperparameter space explored.
 
 4. **Evaluation methodology** -- Four-layer eval (stock LLM, RAG, cosine, foveated). NDCG@10 with honest variance reporting (mean 0.878, not peak 0.900). How to construct evaluation sets from CogDoc ideal sources.
 
@@ -84,6 +84,11 @@ The key insight: the SSM maintains a hidden state that compresses the user's tra
 - Discovery: smaller state spaces work better. D_STATE=4 outperformed D_STATE=64.
 - Converged to: D_MODEL=384, D_STATE=4, D_CONV=2, N_LAYERS=2, EXPAND=1
 - **Final: 0.878 mean NDCG@10 across 183 variance reruns (peak 0.900, +4.4σ)**
+  - ⚠️ **Reproducibility gate: FAILING as of 2026-04-11 and not re-run since.** A 5-seed
+    test gave σ = 0.039 against a 0.020 threshold — see
+    [variance-results.md](variance-results.md). Seeding fixes landed in code but were
+    never re-validated. Read every number in this document as provisional until that
+    gate is re-run.
 - Cosine baseline on same task: 0.773
 
 **Why it works:** Retrieval is a temporal prediction problem. The SSM's recurrence naturally captures session dynamics -- early queries set context, mid-session queries narrow focus, late queries often revisit fundamentals. A 6KB hidden state encodes this entire trajectory.
@@ -137,7 +142,7 @@ MambaTRM (2.28M params)
 - Training is NOT reproducible across runs. Same config produced 0.882 and 0.728.
 - **Root causes:** Incomplete RNG seeding (MPS, numpy, random unseeded), time-budget training (120s wall clock, not fixed steps), embedding index drift between runs.
 - **Fixes applied:** Complete seeding (torch/MPS/numpy/random to 42), `--max-steps` flag, data.pt hash logging.
-- **Status:** Fixes in code, not yet re-validated with 5-run variance test.
+- **Status:** Fixes in code, **not yet re-validated** with the 5-run variance test (open since 2026-04-11).
 
 ### Signal Waste
 - 59% of extracted signals (1,352 of 2,298) are skipped because the embedding index only covers `.md` files, but many signals reference `.go`, `.py`, `.ts`, etc.
@@ -175,7 +180,7 @@ Full logs: `results.tsv` (transformer), `results_mamba.tsv` (Mamba)
 - Content-addressed KV blocks via hash (vLLM, LMCache, Everpure)
 - Cosine similarity retrieval for context assembly (RAG)
 
-**What's genuinely novel:**
+**What we did not find prior art for** (survey dated 2026-04-11, not exhaustive):
 - Learned temporal retrieval model (SSM) trained on agent behavioral traces
 - Crystallization events as gold retrieval labels
 - Cognitive phase detection from tool-call patterns
@@ -183,11 +188,11 @@ Full logs: `results.tsv` (transformer), `results_mamba.tsv` (Mamba)
 
 **Closest prior art:** LRAT (arxiv 2604.04949) -- agent trajectory retrieval with similar core insight. TRM extends with crystallization-as-label, cascade detection from behavioral features, and SSM architecture for temporal modeling.
 
-See: `.cog/mem/semantic/projects/portfolio/overnight-runs/run-2026-04-11-prior-art-deep.md` for full survey of 25+ papers.
+The full survey (25+ papers, 2026-04-11) is an internal working document and is not published here. Treat the positioning above as one team's dated reading, not a literature review you can check.
 
 ## Planned Experiments
 
-Five experiments designed (see `run-2026-04-11-training-next-design.md`):
+Five experiments designed (design doc is internal, not published):
 1. Reproducibility baseline (5 seeded runs, ~40 min)
 2. Signal quality ablation (no-last, gold-only, no-continue conditions)
 3. Session-held-out evaluation (split by session, not pair)

@@ -14,6 +14,17 @@
 
 This directory contains the SRC Model dynamical equations, proven properties of the model (τ₁, a = 6, θ-invariance) scoped to the symmetric-coupling case, and cross-domain instantiations that exhibit SRC structure, drawn from established literature and CogOS operational experience. The broader theoretical framework that scaffolds SRC remains internal to the myrgic project, following the convention established in [research/README.md](../README.md): this repository contains public architecture research; it does not contain the full theoretical framework or private workspace internals.
 
+## Scope
+
+The SRC Model sits inside a wider internal framework. Parts of that framework are
+conjectural and some have been refuted by our own review — including a partition-function
+identification that several downstream results depended on. Published here is the subset
+that does not depend on it: the model equations, the OU invariants (τ₁ = ln(2), a = 6,
+θ-invariance), and the cross-domain instantiations.
+
+Nothing here is a claim about fundamental physics. "Established" means established within
+the model equations.
+
 ## Audience
 
 This material is written for three audiences:

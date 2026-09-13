@@ -10,7 +10,7 @@ Per-Layer Embeddings (PLE, Gemma 4), LoRA (Low-Rank Adaptation) adapters, and th
 4. Are dramatically smaller than the systems they condition
 5. Exploit the low intrinsic dimensionality of their target computation
 
-While individual mechanisms are well-studied (LoRA variants, PLE in Gemma, SSMs (Selective State Space Models) for sequence modeling), the structural convergence across all three — and especially the connection to SSM-based context scoring — appears uncharted as of April 2026. We propose a unified abstraction -- **LoRO (Low-Rank Observer)** -- that captures all three as instances of a self-referential loop where a low-rank state shapes the computation that produces the next observation that updates the state.
+The individual mechanisms are well-studied (LoRA variants, PLE in Gemma, SSMs (Selective State Space Models) for sequence modeling). We propose a unified abstraction -- **LoRO (Low-Rank Observer)** -- that captures all three as instances of a self-referential loop where a low-rank state shapes the computation that produces the next observation that updates the state.
 
 ## LoRA Mathematical Foundation
 
@@ -247,7 +247,7 @@ Same base weights across all modes. Swap behavior by swapping conditioning signa
 
 ## Literature Gap
 
-While individual mechanisms are well-studied (LoRA variants, PLE in Gemma, SSMs for sequence modeling), the structural convergence across all three — and especially the connection to SSM-based context scoring — appears uncharted as of April 2026.
+The individual mechanisms are well-studied (LoRA variants, PLE in Gemma, SSMs for sequence modeling); the convergence across all three is the framing this document proposes.
 
 - The LoRA comprehensive review (arXiv 2501.00365) does not include PLE in its taxonomy
 - MoLoRA (2026) moves LoRA toward PLE-like per-token conditioning but doesn't cite PLE

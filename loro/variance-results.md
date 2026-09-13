@@ -6,13 +6,17 @@
 
 ## Results
 
-| Seed | NDCG@10  | Cosine Baseline | Delta (pts) |
-|------|----------|-----------------|-------------|
-| 42   | 0.882645 | 0.401927        | +480.7      |
-| 123  | 0.817920 | 0.397368        | +420.6      |
-| 456  | 0.777291 | 0.350319        | +427.0      |
-| 789  | 0.783512 | 0.416976        | +366.5      |
-| 1024 | 0.785123 | 0.376064        | +409.1      |
+| Seed | NDCG@10  | Cosine Baseline | Delta (NDCG) |
+|------|----------|-----------------|--------------|
+| 42   | 0.882645 | 0.401927        | +0.481       |
+| 123  | 0.817920 | 0.397368        | +0.421       |
+| 456  | 0.777291 | 0.350319        | +0.427       |
+| 789  | 0.783512 | 0.416976        | +0.367       |
+| 1024 | 0.785123 | 0.376064        | +0.409       |
+
+Deltas are absolute NDCG@10 points. An earlier version of this table reported the same
+numbers scaled by 1000 ("+480.7"), which read as a percentage improvement and overstated
+the result to a skimming reader.
 
 ## Statistics
 
